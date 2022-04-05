@@ -1,6 +1,8 @@
 <ul>
+  <%= if @current_user do %>
   <li>Points you have: <%= @balance.gathered %></li>
   <li>Points you can give: <%= @balance.to_give %> </li>
+  <% end %>
 <%= if @current_user do %>
   <li><%= @current_user.email %></li>
   <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>

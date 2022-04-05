@@ -17,4 +17,20 @@ defmodule Rewarder.TransferFixtures do
 
     balance
   end
+
+  @doc """
+  Generate a exchange.
+  """
+  def exchange_fixture(attrs \\ %{}) do
+    {:ok, exchange} =
+      attrs
+      |> Enum.into(%{
+        giver_id: 42,
+        quantity: 42,
+        taker_id: 42
+      })
+      |> Rewarder.Transfer.create_exchange()
+
+    exchange
+  end
 end
