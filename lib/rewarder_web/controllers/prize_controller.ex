@@ -6,7 +6,6 @@ defmodule RewarderWeb.PrizeController do
   alias Rewarder.Transfer
 
   def index(conn, _params) do
-
     balance = conn.assigns.current_user.id
     |> Transfer.get_balance!()
 
@@ -14,7 +13,24 @@ defmodule RewarderWeb.PrizeController do
     conn = put_session(conn, :gathered, balance.gathered)
 
     prizes = Rewards.list_prizes()
-    render conn, "index.html", prizes: prizes
+    |> Enum.sort_by(fn(p) -> p.id end)
+
+    case conn.assigns.current_user.role do
+      "admin" -> render conn, "admin_index.html", prizes: prizes
+      _ -> render conn, "index.html", prizes: prizes
+    end
+  end
+
+  def turn_prize_on(conn, %{"id" => id}) do
+    prize = Rewards.get_prize!(id)
+    Rewards.update_prize(prize, %{"active" => true})
+    redirect(conn, to: Routes.prize_path(conn, :index))
+  end
+
+  def turn_prize_off(conn, %{"id" => id}) do
+    prize = Rewards.get_prize!(id)
+    Rewards.update_prize(prize, %{"active" => false})
+    redirect(conn, to: Routes.prize_path(conn, :index))
   end
 
   def history(conn, _params) do
@@ -75,7 +91,7 @@ defmodule RewarderWeb.PrizeController do
       {:ok, prize} ->
         conn
         |> put_flash(:info, "Prize updated successfully.")
-        |> redirect(to: Routes.prize_path(conn, :show, prize))
+        |> redirect(to: Routes.prize_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", prize: prize, changeset: changeset)

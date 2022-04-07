@@ -7,6 +7,9 @@ defmodule Rewarder.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :name, :string
+    field :surname, :string
+    field :role, :string
     has_one :balances, Rewarder.Transfer.Balance
     timestamps()
   end
@@ -30,7 +33,7 @@ defmodule Rewarder.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :role])
     |> validate_email()
     |> validate_password(opts)
   end

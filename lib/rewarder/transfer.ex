@@ -54,7 +54,7 @@ defmodule Rewarder.Transfer do
     query = from b in "balances",
     inner_join: u in "users",
     where: b.user_id == u.id,
-    select: %{points: b.gathered,points_left: b.to_give, email: u.email, user_id: u.id}
+    select: %{points: b.gathered,points_left: b.to_give, email: u.email, user_id: u.id, role: u.role}
     Repo.all(query)
   end
 

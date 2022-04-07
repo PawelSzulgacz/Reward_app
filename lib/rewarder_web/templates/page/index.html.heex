@@ -1,6 +1,7 @@
 
 <%= for user <- @data do %>
 
+<%= if user.role != "admin" do %>
 <li>
 <%= user.email %>
 do oddania - 
@@ -8,7 +9,7 @@ do oddania -
 zdobyte - 
 <%= user.points %>
 </li>
-
+<% end %>
 
 <%= if @current_user && @current_user.id !== user.user_id do %>
 <%= form_for @changeset, Routes.page_path(@conn, :index), fn f -> %>

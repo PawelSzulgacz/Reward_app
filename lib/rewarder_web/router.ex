@@ -31,6 +31,8 @@ defmodule RewarderWeb.Router do
     get "/acquire/:id", PrizeController, :acquire
     post "/month_history", PrizeController, :history_by_month
     get "/month_history", PrizeController, :history_by_month
+    get "/turn_off/:id", PrizeController, :turn_prize_off
+    get "/turn_on/:id", PrizeController, :turn_prize_on
     resources "/", PrizeController
   end
 

@@ -15,9 +15,9 @@ defmodule Rewarder.Rewards do
     |> Repo.insert()
 
     points = get_prize!(reward_id)
-
     Transfer.edit_points_gathered(user_id, -points.cost)
   end
+
 
   def prizes_history(id) do
     query = from h in "prize_histories",
