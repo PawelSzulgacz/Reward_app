@@ -8,7 +8,7 @@ defmodule Rewarder.Transfer do
 
   alias Rewarder.Transfer.{Balance, Exchange}
 
-  def create_changeset() do
+  def create_changeset_exchange() do
     %Exchange{}
     |> Exchange.changeset()
   end
@@ -19,21 +19,26 @@ defmodule Rewarder.Transfer do
     |> Exchange.changeset(%{giver_id: user, taker_id: user_to_give, quantity: quantity})
     |> Repo.insert()
 
-    got_giver = get_balance!(user).to_give
-    got_taker = get_balance!(user_to_give).gathered
+    edit_points_to_give(user, -quantity)
+
+    edit_points_gathered(user_to_give, quantity)
+  end
+
+  def edit_points_to_give(user, quantity) do
+    points = get_balance!(user).to_give
 
     %Balance{user_id: user, id: user}
-    |> Balance.changeset(%{to_give: got_giver - quantity})
-    |> Repo.update()
-
-    %Balance{user_id: user_to_give, id: user_to_give}
-    |> Balance.changeset(%{gathered: got_taker + quantity})
+    |> Balance.changeset(%{to_give: points + quantity})
     |> Repo.update()
   end
-  def check() do
 
+  def edit_points_gathered(user, quantity) do
+    points = get_balance!(user).gathered
+
+    %Balance{user_id: user, id: user}
+    |> Balance.changeset(%{gathered: points + quantity})
+    |> Repo.update()
   end
-
 
   def add_points(user) do
 

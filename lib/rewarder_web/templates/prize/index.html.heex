@@ -1,0 +1,30 @@
+<h1>Listing Prizes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Cost</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for prize <- @prizes do %>
+    <tr>
+      <td><%= prize.description %></td>
+      <td><%= prize.cost %></td>
+
+      <td>
+        <span><%= link "Edit", to: Routes.prize_path(@conn, :edit, prize) %></span>
+        <span><%= link "Delete", to: Routes.prize_path(@conn, :delete, prize), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <%= if @conn.private.plug_session["gathered"] >= prize.cost do %>
+        <span><%= link "Get", to: Routes.prize_path(@conn, :acquire, prize) %></span>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Prize", to: Routes.prize_path(@conn, :new) %></span>

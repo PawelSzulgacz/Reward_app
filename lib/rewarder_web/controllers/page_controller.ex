@@ -2,21 +2,23 @@ defmodule RewarderWeb.PageController do
   use RewarderWeb, :controller
 
   alias Enum
-  alias Rewarder.Accounts
   alias Rewarder.Transfer
-  alias Rewarder.Repo
 
   def index(conn, _params) do
     data = Transfer.users_with_points()
     if conn.assigns.current_user do
 
-    balance = conn.assigns.current_user.id
-    |> Transfer.get_balance!()
-
     data = Transfer.users_with_points()
     |> Enum.sort_by(fn(p) -> p.user_id end)
 
-    changeset = Transfer.create_changeset()
+    balance = conn.assigns.current_user.id
+    |> Transfer.get_balance!()
+
+    conn = put_session(conn, :to_give, balance.to_give)
+    conn = put_session(conn, :gathered, balance.gathered)
+
+    changeset = Transfer.create_changeset_exchange()
+
     render conn, "index.html", data: data, balance: balance, changeset: changeset
     else
     render conn, "index.html", data: data

@@ -1,0 +1,18 @@
+<h1>Show Prize</h1>
+
+<ul>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @prize.description %>
+  </li>
+
+  <li>
+    <strong>Cost:</strong>
+    <%= @prize.cost %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.prize_path(@conn, :edit, @prize) %></span> |
+<span><%= link "Back", to: Routes.prize_path(@conn, :index) %></span>

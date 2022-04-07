@@ -48,6 +48,8 @@ defmodule Rewarder.Accounts do
       when is_binary(email) and is_binary(password) do
     user = Repo.get_by(User, email: email)
     if User.valid_password?(user, password), do: user
+    #posts = Repo.preload(user, :balances)
+    #posts
   end
 
   @doc """

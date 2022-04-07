@@ -24,6 +24,16 @@ defmodule RewarderWeb.Router do
     post "/", PageController, :transfer
   end
 
+  scope "/prizes", RewarderWeb do
+    pipe_through :browser
+
+    get "/history", PrizeController, :history
+    get "/acquire/:id", PrizeController, :acquire
+    post "/month_history", PrizeController, :history_by_month
+    get "/month_history", PrizeController, :history_by_month
+    resources "/", PrizeController
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", RewarderWeb do
   #   pipe_through :api

@@ -1,0 +1,6 @@
+<ul>
+<li> description &emsp;&emsp;&emsp;&emsp; cost &emsp;&emsp;&emsp;&emsp; data </li>
+<%= for prize <- @data do %>
+<li><%= prize.description %>&emsp;&emsp;&emsp;&emsp;<%= prize.cost %>&emsp;&emsp;&emsp;&emsp;<%= prize.when.hour %>:<%= prize.when.minute %> <%= prize.when.day %>.<%= prize.when.month %>.<%= prize.when.year %></li>
+<% end %> 
+</ul>

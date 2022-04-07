@@ -1,0 +1,12 @@
+<%= form_for @changeset, Routes.prize_path(@conn, :history_by_month), fn f -> %>
+<%= datetime_select f, :when, builder: fn b -> %>
+<%= b.(:month, []) %>
+<% end %>
+<%= submit "Check"%>
+<% end %>
+<ul>
+    <li> description &emsp;&emsp;&emsp;&emsp; cost &emsp;&emsp;&emsp;&emsp; data </li>
+    <%= for prize <- @data do %>
+    <li><%= prize.description %>&emsp;&emsp;&emsp;&emsp;<%= prize.cost %>&emsp;&emsp;&emsp;&emsp;<%= prize.when.hour %>:<%= prize.when.minute %> <%= prize.when.day %>.<%= prize.when.month %>.<%= prize.when.year %></li>
+    <% end %> 
+</ul>

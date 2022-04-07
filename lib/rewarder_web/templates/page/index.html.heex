@@ -1,6 +1,6 @@
 
 <%= for user <- @data do %>
-<%= if @current_user && @current_user.id !== user.user_id do %>
+
 <li>
 <%= user.email %>
 do oddania - 
@@ -8,11 +8,11 @@ do oddania -
 zdobyte - 
 <%= user.points %>
 </li>
-<% end %>
+
 
 <%= if @current_user && @current_user.id !== user.user_id do %>
 <%= form_for @changeset, Routes.page_path(@conn, :index), fn f -> %>
-  <%= range_input f, :quantity, id: "ageInputId", value: 0, max: @balance.to_give, oninput: "this.nextElementSibling.value = this.value" %>
+  <%= range_input f, :quantity, id: "ageInputId", value: 0, max: @conn.private.plug_session["to_give"], oninput: "this.nextElementSibling.value = this.value" %>
   <output>0</output>
   <%= hidden_input f, :taker_id, value: user.user_id %>
   <%= submit "Send"%>
