@@ -7,12 +7,15 @@
   <% end %>
 
 <%= if @current_user do %>
-  <li><%= @current_user.email %></li>
+  <li><%= @current_user.name %> - <%= @current_user.surname %></li>
   <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
   <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
   <li><%= link "Rewards", to: Routes.prize_path(@conn, :index) %></li>
     <%= if @current_user.role == "admin" do %>
     <li><%= link "Rewards history by month", to: Routes.prize_path(@conn, :history_by_month) %></li>
+    <% else %>
+    <li><%= link "Your rewards history", to: Routes.prize_path(@conn, :history) %></li>
+
     <% end %>
 <% else %>
   <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>

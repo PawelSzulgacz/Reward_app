@@ -33,7 +33,7 @@ defmodule Rewarder.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :role])
+    |> cast(attrs, [:email, :password, :role, :name, :surname])
     |> validate_email()
     |> validate_password(opts)
   end

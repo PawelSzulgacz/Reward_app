@@ -10,7 +10,6 @@ defmodule Rewarder.Rewards do
 
   def add_prize(user_id, reward_id) do
     %Prize_history{}
-    |> build_assoc(:prize_histories)
     |> Prize_history.changeset(%{reward_id: reward_id, user_id: user_id})
     |> Repo.insert()
 

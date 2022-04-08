@@ -13,6 +13,11 @@ defmodule Rewarder.Transfer do
     |> Exchange.changeset()
   end
 
+  def create_changeset_balance() do
+    %Balance{}
+    |> Balance.changeset()
+  end
+
   def exchange_points(user, user_to_give, quantity) do
 
     %Exchange{}
@@ -54,7 +59,7 @@ defmodule Rewarder.Transfer do
     query = from b in "balances",
     inner_join: u in "users",
     where: b.user_id == u.id,
-    select: %{points: b.gathered,points_left: b.to_give, email: u.email, user_id: u.id, role: u.role}
+    select: %{points: b.gathered,points_left: b.to_give, email: u.email, user_id: u.id, role: u.role, name: u.name, surname: u.surname, month_points: b.month_points}
     Repo.all(query)
   end
 
@@ -118,6 +123,10 @@ defmodule Rewarder.Transfer do
 
   """
   def update_balance(%Balance{} = balance, attrs) do
+    IO.puts("+++")
+    IO.inspect(attrs)
+    IO.puts("++++")
+
     balance
     |> Balance.changeset(attrs)
     |> Repo.update()

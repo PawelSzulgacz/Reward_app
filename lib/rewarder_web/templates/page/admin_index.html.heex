@@ -1,0 +1,22 @@
+
+<%= for user <- @data do %>
+
+<%= if user.role != "admin" do %>
+<li>
+<%= user.name %>
+<%= user.surname %>
+do oddania - 
+<%= user.points_left %>
+zdobyte - 
+<%= user.points %>
+Get by end of month -
+<%= user.month_points %>
+
+<%= form_for @changeset, Routes.page_path(@conn, :update), fn f -> %>
+  <%= number_input f, :month_base, value: user.month_points %>
+  <%= hidden_input f, :user_id, value: user.user_id %>
+  <%= submit "Set" %>
+<% end %>
+</li>
+<% end %>
+<% end %>

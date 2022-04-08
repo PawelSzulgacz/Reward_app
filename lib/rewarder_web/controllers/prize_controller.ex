@@ -6,19 +6,26 @@ defmodule RewarderWeb.PrizeController do
   alias Rewarder.Transfer
 
   def index(conn, _params) do
-    balance = conn.assigns.current_user.id
-    |> Transfer.get_balance!()
 
+    prizes = list_of_prizes_sorted()
+    balance = users_info(conn)
     conn = put_session(conn, :to_give, balance.to_give)
     conn = put_session(conn, :gathered, balance.gathered)
-
-    prizes = Rewards.list_prizes()
-    |> Enum.sort_by(fn(p) -> p.id end)
 
     case conn.assigns.current_user.role do
       "admin" -> render conn, "admin_index.html", prizes: prizes
       _ -> render conn, "index.html", prizes: prizes
     end
+  end
+
+  def list_of_prizes_sorted() do
+    Rewards.list_prizes()
+    |> Enum.sort_by(fn(p) -> p.id end)
+  end
+
+  def users_info(conn) do
+    conn.assigns.current_user.id
+    |> Transfer.get_balance!()
   end
 
   def turn_prize_on(conn, %{"id" => id}) do
@@ -86,7 +93,6 @@ defmodule RewarderWeb.PrizeController do
 
   def update(conn, %{"id" => id, "prize" => prize_params}) do
     prize = Rewards.get_prize!(id)
-
     case Rewards.update_prize(prize, prize_params) do
       {:ok, prize} ->
         conn

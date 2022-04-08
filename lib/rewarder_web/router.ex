@@ -19,7 +19,7 @@ defmodule RewarderWeb.Router do
 
   scope "/", RewarderWeb do
     pipe_through :browser
-
+    post "/update", PageController, :update
     get "/", PageController, :index
     post "/", PageController, :transfer
   end
