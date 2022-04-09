@@ -1,15 +1,24 @@
-<h1>Forgot your password?</h1>
+<div class="row">
+  <span class="h2 my-3">Forgot your password?</span>
+  </div>
+  <div class="row">
 
 <.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
+  <p>
   <%= label f, :email %>
   <%= email_input f, :email, required: true %>
-
-  <div>
-    <%= submit "Send instructions to reset password" %>
-  </div>
+  </p>
+  <button class="btn btn-primary" type="submit">Send instructions to reset password</button>
 </.form>
 
+<p></p>
 <p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+  <%= link to: Routes.user_registration_path(@conn, :new) do %> 
+  <span class="text-dark">Log in</span>
+  <% end %>|
+  <%= link to: Routes.user_reset_password_path(@conn, :new) do %>
+  <span class="text-dark">Forgot your password?</span>
+  <% end %>
 </p>
+
+</div>

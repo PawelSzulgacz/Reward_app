@@ -1,5 +1,14 @@
-<h1>New Prize</h1>
+<div class="row">
+    <span class="h2 my-3">New prize</span>
+  </div>
+  
+  <div class="row">
 
 <%= render "form.html", Map.put(assigns, :action, Routes.prize_path(@conn, :create)) %>
 
-<span><%= link "Back", to: Routes.prize_path(@conn, :index) %></span>
+<p></p>
+<%= link to: Routes.prize_path(@conn, :index) do %>
+    <span class="text-dark">Back</span>
+<% end %>
+
+</div>

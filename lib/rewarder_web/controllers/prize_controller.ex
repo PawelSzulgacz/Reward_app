@@ -11,11 +11,13 @@ defmodule RewarderWeb.PrizeController do
     balance = users_info(conn)
     conn = put_session(conn, :to_give, balance.to_give)
     conn = put_session(conn, :gathered, balance.gathered)
+    render conn, "index.html", prizes: prizes
 
-    case conn.assigns.current_user.role do
-      "admin" -> render conn, "admin_index.html", prizes: prizes
-      _ -> render conn, "index.html", prizes: prizes
-    end
+  end
+
+  def admin_index(conn, _params) do
+    prizes = list_of_prizes_sorted()
+    render conn, "admin_index.html", prizes: prizes
   end
 
   def list_of_prizes_sorted() do
@@ -30,13 +32,27 @@ defmodule RewarderWeb.PrizeController do
 
   def turn_prize_on(conn, %{"id" => id}) do
     prize = Rewards.get_prize!(id)
-    Rewards.update_prize(prize, %{"active" => true})
-    redirect(conn, to: Routes.prize_path(conn, :index))
+    case Rewards.update_prize(prize, %{"active" => true}) do
+      {:ok, _prize} ->
+        conn
+        |> put_flash(:info, "Prized turned on, successfully")
+        |> redirect(to: Routes.prize_path(conn, :index))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        redirect(conn, to: Routes.prize_path(conn, :index))
+    end
   end
 
   def turn_prize_off(conn, %{"id" => id}) do
     prize = Rewards.get_prize!(id)
-    Rewards.update_prize(prize, %{"active" => false})
+    case Rewards.update_prize(prize, %{"active" => false}) do
+      {:ok, _prize} ->
+        conn
+        |> put_flash(:info, "Prized turned off, successfully")
+        |> redirect(to: Routes.prize_path(conn, :index))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        redirect(conn, to: Routes.prize_path(conn, :index))
+    end
+
     redirect(conn, to: Routes.prize_path(conn, :index))
   end
 
@@ -59,7 +75,14 @@ defmodule RewarderWeb.PrizeController do
   end
 
   def acquire(conn, %{"id" => id}) do
-    Rewards.add_prize(conn.assigns.current_user.id, id)
+    case Rewards.add_prize(conn.assigns.current_user.id, id) do
+      {:ok, _prize} ->
+        conn
+        |> put_flash(:info, "Congratulation, you got a reward!")
+        |> redirect(to: Routes.prize_path(conn, :index))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", changeset: changeset)
+    end
 
     redirect(conn, to: Routes.prize_path(conn, :index))
   end

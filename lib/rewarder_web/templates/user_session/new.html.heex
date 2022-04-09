@@ -1,5 +1,7 @@
-<h1>Log in</h1>
-
+<div class="row">
+  <span class="h2 my-3">Log in</span>
+  </div>
+  <div class="row">
 <.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
   <%= if @error_message do %>
     <div class="alert alert-danger">
@@ -7,21 +9,29 @@
     </div>
   <% end %>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+  <p>
+    <%= label f, :email %>
+    <%= email_input f, :email, required: true %>
+  </p>
+  <p>
+    <%= label f, :password %>
+    <%= password_input f, :password, required: true %>
+  </p>
+  <p>
+    <%= label f, :remember_me, "Keep me logged in for 60 days" %>
+    <%= checkbox f, :remember_me %>
+  </p>
 
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
+    <button class="btn btn-primary" type="submit">Log in</button>
 
-  <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-  <%= checkbox f, :remember_me %>
-
-  <div>
-    <%= submit "Log in" %>
-  </div>
 </.form>
-
+<p></p>
 <p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
+  <%= link to: Routes.user_registration_path(@conn, :new) do %> 
+  <span class="text-dark">Log in</span>
+  <% end %>|
+  <%= link to: Routes.user_reset_password_path(@conn, :new) do %>
+  <span class="text-dark">Forgot your password?</span>
+  <% end %>
 </p>
+</div>

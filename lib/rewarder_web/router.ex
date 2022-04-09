@@ -18,24 +18,37 @@ defmodule RewarderWeb.Router do
   end
 
   scope "/", RewarderWeb do
-    pipe_through :browser
-    post "/update", PageController, :update
+    pipe_through [:browser, :redirect_if_admin_to_index]
     get "/", PageController, :index
     post "/", PageController, :transfer
   end
-
-  scope "/prizes", RewarderWeb do
-    pipe_through :browser
-
-    get "/history", PrizeController, :history
-    get "/acquire/:id", PrizeController, :acquire
-    post "/month_history", PrizeController, :history_by_month
-    get "/month_history", PrizeController, :history_by_month
-    get "/turn_off/:id", PrizeController, :turn_prize_off
-    get "/turn_on/:id", PrizeController, :turn_prize_on
-    resources "/", PrizeController
+  scope "/admin", RewarderWeb do
+    pipe_through [:browser, :require_authenticated_admin]
+    post "/update", PageController, :update
+    get "/", PageController, :admin_index
   end
 
+  scope "/prizes", RewarderWeb do
+    pipe_through [:browser, :redirect_if_admin_to_rewards]
+    get "/history", PrizeController, :history
+    get "/acquire/:id", PrizeController, :acquire
+    get "/", PrizeController, :index
+  end
+
+  scope "/admin_prizes", RewarderWeb do
+    pipe_through [:browser, :require_authenticated_admin]
+    post "/month_history", PrizeController, :history_by_month
+    get "/month_history", PrizeController, :history_by_month
+    get "/", PrizeController, :admin_index
+    get "/:id/edit", PrizeController, :edit
+    get "/new", PrizeController, :new
+    post "/", PrizeController, :create
+    patch "/:id", PrizeController, :update
+    put "/:id", PrizeController, :update
+    delete "/:id", PrizeController, :delete
+    get "/turn_off/:id", PrizeController, :turn_prize_off
+    get "/turn_on/:id", PrizeController, :turn_prize_on
+  end
   # Other scopes may use custom stacks.
   # scope "/api", RewarderWeb do
   #   pipe_through :api

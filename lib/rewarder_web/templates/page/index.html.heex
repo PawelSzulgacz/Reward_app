@@ -1,22 +1,45 @@
 
-<%= for user <- @data do %>
+<%= if @current_user do %>
+  <div class="row">
+    <span class="h2 my-3">Points menu</span>
+  </div>
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+  <table class="table table-hover" style="border-collapse: separate;border-spacing:0 5px;">
+    <tbody>
+      <thead>
+        <tr>
+          <th scope="col">Name and surname</th>
+          <th scope="col">Points to send</th>
+          <th scope="col">Send</th>
+        </tr>
+      </thead>
+      <%= for user <- @data do %>
+        <%= if user.role != "admin" && @current_user && @current_user.id !== user.user_id do %>
+        <tr>
+          <td>
+            <%= user.name %>
+            <%= user.surname %>
+          </td>
+            <%= form_for @changeset, Routes.page_path(@conn, :index), fn f -> %>
+              <td>
+                <%= range_input f, :quantity, id: "ageInputId", value: 0, max: @conn.private.plug_session["to_give"], oninput: "this.nextElementSibling.value = this.value" %>
+                <output>0</output>
+              </td>
+                <%= hidden_input f, :taker_id, value: user.user_id %>
+              <td>
+                <button class="btn btn-primary" type="submit">Send</button>
+              </td>
+            <% end %>
+        </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="col-md-1"></div>
+</div>
+  <% end %>
 
-<%= if user.role != "admin" && @current_user && @current_user.id !== user.user_id do %>
-<li>
-<%= user.name %>
-<%= user.surname %>
-do oddania - 
-<%= user.points_left %>
-zdobyte - 
-<%= user.points %>
-</li>
 
-<%= form_for @changeset, Routes.page_path(@conn, :index), fn f -> %>
-  <%= range_input f, :quantity, id: "ageInputId", value: 0, max: @conn.private.plug_session["to_give"], oninput: "this.nextElementSibling.value = this.value" %>
-  <output>0</output>
-  <%= hidden_input f, :taker_id, value: user.user_id %>
-  <%= submit "Send"%>
-
-<% end %>
-<% end %>
-<% end %>

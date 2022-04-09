@@ -1,3 +1,9 @@
+<div class="row">
+  <span class="h2 my-3">Rewards menu</span>
+</div>
+
+<div class="row">
+
 <.form let={f} for={@changeset} action={@action}>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -5,15 +11,19 @@
     </div>
   <% end %>
 
+  <p>
   <%= label f, :description %>
   <%= text_input f, :description %>
   <%= error_tag f, :description %>
-
+  </p>
+  <p>
   <%= label f, :cost %>
   <%= number_input f, :cost %>
   <%= error_tag f, :cost %>
+  </p>
 
-  <div>
-    <%= submit "Save" %>
-  </div>
+  <button class="btn btn-primary" type="submit">Save</button>
+
 </.form>
+
+</div>

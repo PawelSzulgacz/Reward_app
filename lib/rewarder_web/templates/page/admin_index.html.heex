@@ -1,22 +1,53 @@
+<div class="row">
+  <span class="h2 my-3">Users menu</span>
+</div>
 
-<%= for user <- @data do %>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+  <table class="table table-hover" style="border-collapse: separate;border-spacing:0 5px;">
+    <tbody>
+      <thead>
+        <tr>
+          <th scope="col">Name and surname</th>
+          <th scope="col">Points to give</th>
+          <th scope="col">Points gathered</th>
+          <th scope="col">Points get at the end of month</th>
+          <th scope="col">Points to send</th>
+          <th scope="col">Send</th>
+        </tr>
+      </thead>
+      <%= for user <- @data do %>
+      <%= if user.role != "admin" do %>
+        <tr>
+          <td>
+            <%= user.name %>
+            <%= user.surname %>
+          </td>
+          <td>
+          <%= user.points_left %>
+          </td>
+          <td>
+          <%= user.points %>
+          </td>
+          <td>
+          <%= user.month_points %>
+        </td>
 
-<%= if user.role != "admin" do %>
-<li>
-<%= user.name %>
-<%= user.surname %>
-do oddania - 
-<%= user.points_left %>
-zdobyte - 
-<%= user.points %>
-Get by end of month -
-<%= user.month_points %>
-
-<%= form_for @changeset, Routes.page_path(@conn, :update), fn f -> %>
-  <%= number_input f, :month_base, value: user.month_points %>
-  <%= hidden_input f, :user_id, value: user.user_id %>
-  <%= submit "Set" %>
-<% end %>
-</li>
-<% end %>
-<% end %>
+            <%= form_for @changeset, Routes.page_path(@conn, :update), fn f -> %>
+              <td>
+                <%= number_input f, :month_base, value: user.month_points %>
+              </td>
+                <%= hidden_input f, :user_id, value: user.user_id %>
+              <td>
+                <button class="btn btn-primary" type="submit">Send</button>
+              </td>
+            <% end %>
+        </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+  <div class="col-md-1"></div>
+</div>

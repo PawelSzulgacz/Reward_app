@@ -5,14 +5,8 @@ defmodule RewarderWeb.PageController do
   alias Rewarder.Transfer
 
   def index(conn, _params) do
-
     data = data_about_users_sorted()
-
     cond do
-      conn.assigns.current_user && conn.assigns.current_user.role == "admin" ->
-        changeset = Transfer.create_changeset_balance()
-        render conn, "admin_index.html", data: data, changeset: changeset
-
       conn.assigns.current_user ->
         balance = user_points(conn)
         changeset = Transfer.create_changeset_exchange()
@@ -23,6 +17,12 @@ defmodule RewarderWeb.PageController do
 
       true -> render conn, "index.html", data: data
     end
+  end
+
+  def admin_index(conn, _params) do
+    data = data_about_users_sorted()
+    changeset = Transfer.create_changeset_balance()
+    render conn, "admin_index.html", data: data, changeset: changeset
   end
 
   def data_about_users_sorted() do
@@ -43,7 +43,9 @@ defmodule RewarderWeb.PageController do
 
   def update(conn, %{"balance" => %{"user_id" => user_id, "month_base" => points_by_month}}) do
     transfer = Transfer.get_balance!(user_id)
-
+    IO.puts("+++")
+    IO.inspect(user_id)
+    IO.puts("++++++++++++++++++")
     case Transfer.update_balance(transfer, %{"month_points" => points_by_month}) do
       {:ok, _balance} ->
         conn

@@ -25,8 +25,14 @@ config :rewarder, RewarderWeb.Endpoint,
   secret_key_base: "uz83y8ksVrr+YwV1O+guSqMdAIQ+Z8tDyOQb1SK6l2zEjkyziASoly5ZoAir2786",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    sass: {
+      DartSass,
+      :install_and_run,
+      [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]
+    }
   ]
+
 
 # ## SSL Support
 #
@@ -62,6 +68,8 @@ config :rewarder, RewarderWeb.Endpoint,
       ~r"lib/rewarder_web/templates/.*(eex)$"
     ]
   ]
+
+
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

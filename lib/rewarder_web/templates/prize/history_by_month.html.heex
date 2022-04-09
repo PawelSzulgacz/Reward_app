@@ -1,12 +1,38 @@
-<%= form_for @changeset, Routes.prize_path(@conn, :history_by_month), fn f -> %>
-<%= datetime_select f, :when, builder: fn b -> %>
-<%= b.(:month, []) %>
-<% end %>
-<%= submit "Check"%>
-<% end %>
-<ul>
-    <li> description &emsp;&emsp;&emsp;&emsp; cost &emsp;&emsp;&emsp;&emsp; data </li>
-    <%= for prize <- @data do %>
-    <li><%= prize.description %>&emsp;&emsp;&emsp;&emsp;<%= prize.cost %>&emsp;&emsp;&emsp;&emsp;<%= prize.when.hour %>:<%= prize.when.minute %> <%= prize.when.day %>.<%= prize.when.month %>.<%= prize.when.year %></li>
-    <% end %> 
-</ul>
+<div class="row">
+  <span class="h2 my-3">History by month</span>
+</div>
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <%= form_for @changeset, Routes.prize_path(@conn, :history_by_month), fn f -> %>
+        <%= datetime_select f, :when, default: ~N[2000-01-01 23:00:07], class: "form-select", builder: fn b -> %>
+        <%= b.(:month, []) %>
+        <% end %> 
+        &nbsp;<button class="btn btn-primary" type="submit">Send</button>
+        <% end %>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+    <table class="table table-hover" style="border-collapse: separate;border-spacing:0 5px;">
+      <tbody>
+        <thead>
+          <tr>
+            <th scope="col">Description</th>
+            <th scope="col">Cost</th>
+            <th scope="col">Data</th>
+          </tr>
+        </thead>
+        <%= for prize <- @data do %>
+        <tr>
+            <td><%= prize.description %></td>
+            <td><%= prize.cost %></td>
+            <td><%= prize.when.hour %>:<%= prize.when.minute %> <%= prize.when.day %>.<%= prize.when.month %>.<%= prize.when.year %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+    <div class="col-md-1"></div>
+  </div>

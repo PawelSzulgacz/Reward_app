@@ -1,23 +1,31 @@
-<h1>Listing Prizes</h1>
+<div class="row">
+  <span class="h2 my-3">Rewards menu</span>
+</div>
 
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
 <table>
   <thead>
     <tr>
       <th>Description</th>
       <th>Cost</th>
-
-      <th></th>
+      <th>Get</th>
     </tr>
   </thead>
   <tbody>
 <%= for prize <- @prizes do %>
     <tr>
       <%= if prize.active == true do %>
-      <td><%= prize.description %></td>
+      <td class="w-50"><%= prize.description %></td>
       <td><%= prize.cost %></td>
       <td>
       <%= if @conn.private.plug_session["gathered"] >= prize.cost do %>
-      <span><%= link "Get", to: Routes.prize_path(@conn, :acquire, prize) %></span>
+        <%= link to: Routes.prize_path(@conn, :acquire, prize) do %>
+        <button class="btn btn-primary" type="submit">Get</button>
+        <% end %>
+      <% else %>
+      <button class="btn btn-primary" type="submit" disabled>Get</button>
       <% end %>
       </td>
       <% end %>
@@ -25,3 +33,6 @@
 <% end %>
   </tbody>
 </table>
+</div>
+<div class="col-md-1"></div>
+</div>

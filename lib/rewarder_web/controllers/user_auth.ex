@@ -144,6 +144,37 @@ defmodule RewarderWeb.UserAuth do
     put_session(conn, :user_return_to, current_path(conn))
   end
 
+  def redirect_if_admin_to_rewards(conn, _opts) do
+    if conn.assigns.current_user && conn.assigns.current_user.role == "admin"do
+      conn
+      |> redirect(to: Routes.prize_path(conn, :admin_index))
+      |> halt()
+    else
+      conn
+    end
+  end
+
+  def redirect_if_admin_to_index(conn, _opts) do
+    if conn.assigns.current_user && conn.assigns.current_user.role == "admin"  do
+      conn
+      |> redirect(to: Routes.page_path(conn, :admin_index))
+      |> halt()
+    else
+      conn
+    end
+  end
+
+  def require_authenticated_admin(conn, _opts) do
+    if conn.assigns.current_user && conn.assigns.current_user.role == "admin" do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be an admin to acces this page")
+      |> redirect(to: Routes.page_path(conn, :index))
+      |> halt()
+    end
+  end
+
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/"

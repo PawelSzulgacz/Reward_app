@@ -1,23 +1,31 @@
-<h1>Listing Prizes</h1>
+<div class="row">
+  <span class="h2 my-3">Rewards menu</span>
+</div>
 
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
 <table>
   <thead>
     <tr>
       <th>Description</th>
       <th>Cost</th>
-
-      <th></th>
+      <th>Edit</th>
+      <th>Active for users</th>
     </tr>
   </thead>
   <tbody>
 <%= for prize <- @prizes do %>
     <tr>
-      <td><%= prize.description %></td>
+      <td class="w-50" ><%= prize.description %></td>
       <td><%= prize.cost %></td>
       <td>
-      <span><%= link "Edit", to: Routes.prize_path(@conn, :edit, prize) %></span>
+      <%= link to: Routes.prize_path(@conn, :edit, prize) do %>
+        <button class="btn btn-primary" type="submit">Edit</button>
+      <% end %>
       <!-- <span><%= link "Delete", to: Routes.prize_path(@conn, :delete, prize), method: :delete, data: [confirm: "Are you sure?"] %></span> -->
-
+      </td>
+      <td>
     <%= if prize.active == true do %>
         <span>
         <%= link to: Routes.prize_path(@conn, :turn_prize_off, prize) do %>
@@ -36,5 +44,12 @@
 <% end %>
   </tbody>
 </table>
+</div>
+<div class="col-md-1"></div>
+</div>
+<hr>
+<%= link to: Routes.prize_path(@conn, :new) do %>
+  <button class="btn btn-primary" type="submit">New prize</button>
+<% end %>
 
-<span><%= link "New Prize", to: Routes.prize_path(@conn, :new) %></span>
+

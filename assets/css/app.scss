@@ -1,0 +1,12 @@
+
+.alert:empty{
+    display: none;
+  }
+
+$theme-colors: (
+  "secondary": #5cdb95,
+  "primary": #8EE4AF
+);
+
+
+@import "../node_modules/bootstrap/scss/bootstrap";

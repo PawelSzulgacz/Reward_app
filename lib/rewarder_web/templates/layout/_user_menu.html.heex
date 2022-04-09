@@ -1,24 +1,53 @@
-<ul>
-
-  <%= link "Main site", to: Routes.page_path(@conn, :index) %>
-  <%= if @current_user && @current_user.role != "admin" do %>
-  <li>Points you have: <%= @conn.private.plug_session["gathered"] %></li>
-  <li>Points you can give: <%= @conn.private.plug_session["to_give"] %></li>
-  <% end %>
-
-<%= if @current_user do %>
-  <li><%= @current_user.name %> - <%= @current_user.surname %></li>
-  <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-  <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
-  <li><%= link "Rewards", to: Routes.prize_path(@conn, :index) %></li>
-    <%= if @current_user.role == "admin" do %>
-    <li><%= link "Rewards history by month", to: Routes.prize_path(@conn, :history_by_month) %></li>
-    <% else %>
-    <li><%= link "Your rewards history", to: Routes.prize_path(@conn, :history) %></li>
-
-    <% end %>
-<% else %>
-  <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-  <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
-<% end %>
-</ul>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="navbar py-2 shadow-sm" style="background-color: #5cdb95;">
+      <div class="col-md-3 text-center">
+        <%= link to: Routes.page_path(@conn, :index), style: "text-decoration: none;" do %>
+        <span class="text-dark h1 nav-item nav-link">Rewarder</span>
+        <% end %>
+      </div>
+        <%= if @current_user do %>
+          <div class="col-md-2">
+            <ul class="nav flex-column">
+            <li class="nav-item">Logged as: <%= @current_user.name %> <%= @current_user.surname %></li> 
+            <%= if  @current_user.role != "admin" do %>
+            <li class="nav-item">Points you have: <%= @conn.private.plug_session["gathered"] %></li>
+              <li class="nav-item">Points you can give: <%= @conn.private.plug_session["to_give"] %></li> 
+            <% end %>
+            </ul>
+          </div>
+          
+          <div class="col-md-6">
+          <%= link to: Routes.prize_path(@conn, :index), style: "text-decoration: none;" do %>
+            <span class="text-dark h4 btn btn-secondary">Rewards</span>
+          <% end %>
+          <%= if @current_user.role == "admin" do %>
+            <%= link to: Routes.prize_path(@conn, :history_by_month), style: "text-decoration: none;" do %>
+              <span class="text-dark h4 btn btn-secondary">Rewards history by month</span>
+            <% end %>
+          <% else %>
+            <%= link to: Routes.prize_path(@conn, :history), style: "text-decoration: none;" do %>
+              <span class="text-dark h4 btn btn-secondary">Your rewards history</span>
+            <% end %>
+          <% end %>
+          <%= link to: Routes.user_settings_path(@conn, :edit), style: "text-decoration: none;" do %>
+            <span class="text-dark h4 btn btn-secondary" >Settings</span>
+          <% end %>
+            <%= link to: Routes.user_session_path(@conn, :delete), method: :delete, style: "text-decoration: none;" do %>
+              <span class="text-dark h4 btn btn-secondary">Log out</span>
+            <% end %>
+          </div>
+        <% else %>
+        <div class="col-md-6 text-end">
+          <%= link to: Routes.user_registration_path(@conn, :new), style: "text-decoration: none;" do %>
+            <span class="text-dark h4 btn btn-secondary">Register</span>
+          <% end %>
+          <%= link to: Routes.user_session_path(@conn, :new), style: "text-decoration: none;" do %>
+            <span class="text-dark h4 btn btn-secondary">Log in</span>
+          <% end %>
+        </div> 
+        <% end %>
+        <div class="col-md-1"></div>
+    </nav>
+  </div>
+</div>
