@@ -1,19 +1,19 @@
-# Rewarder
+### Introduction ###
 
-To start your Phoenix server:
+A project that allows to manage internal rewards within a company. Users grant each other points, that can be than converted to various benefits. 
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+### Technology stack ###
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Elixir 1.13.3, Phoenix 1.6.6, pgAdmin 4, Bootstrap, Git, HTML
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+### Requirements ###
 
-## Learn more
+* pgAdmin 4
+* Elixir 1.13.3
+* Phoenix 1.6.6
+* Unoccupied port 4000
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+### Run application locally ###
+
+* mix.ecto.migrate
+* mix phx.server
