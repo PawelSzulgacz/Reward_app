@@ -2,20 +2,9 @@ defmodule Rewarder.Rewards do
   @moduledoc """
   The Rewards context.
   """
-  import Ecto
   import Ecto.Query, warn: false
   alias Rewarder.Repo
-  alias Rewarder.Transfer
   alias Rewarder.Rewards.{Prize, Prize_history}
-
-  def add_prize(user_id, reward_id) do
-    %Prize_history{}
-    |> Prize_history.changeset(%{reward_id: reward_id, user_id: user_id})
-    |> Repo.insert()
-
-    points = get_prize!(reward_id)
-    Transfer.edit_points_gathered(user_id, -points.cost)
-  end
 
 
   def prizes_history(id) do

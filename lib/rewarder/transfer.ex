@@ -18,40 +18,14 @@ defmodule Rewarder.Transfer do
     |> Balance.changeset()
   end
 
-  def exchange_points(user, user_to_give, quantity) do
-
-    %Exchange{}
-    |> Exchange.changeset(%{giver_id: user, taker_id: user_to_give, quantity: quantity})
-    |> Repo.insert()
-
-    edit_points_to_give(user, -quantity)
-
-    edit_points_gathered(user_to_give, quantity)
-  end
-
-  def edit_points_to_give(user, quantity) do
-    points = get_balance!(user).to_give
-
-    %Balance{user_id: user, id: user}
-    |> Balance.changeset(%{to_give: points + quantity})
-    |> Repo.update()
-  end
-
-  def edit_points_gathered(user, quantity) do
-    points = get_balance!(user).gathered
-
-    %Balance{user_id: user, id: user}
-    |> Balance.changeset(%{gathered: points + quantity})
-    |> Repo.update()
-  end
 
   def add_points(user) do
 
     changeset = user
     |> build_assoc(:balances)
-    |> Balance.changeset(%{user_id: user.id})
+    |> Balance.changeset()
 
-    Repo.insert(changeset)
+    Repo.insert(%{user_id: user.id})
 
   end
 
@@ -123,10 +97,6 @@ defmodule Rewarder.Transfer do
 
   """
   def update_balance(%Balance{} = balance, attrs) do
-    IO.puts("+++")
-    IO.inspect(attrs)
-    IO.puts("++++")
-
     balance
     |> Balance.changeset(attrs)
     |> Repo.update()
@@ -227,6 +197,7 @@ defmodule Rewarder.Transfer do
     |> Exchange.changeset(attrs)
     |> Repo.update()
   end
+
 
   @doc """
   Deletes a exchange.

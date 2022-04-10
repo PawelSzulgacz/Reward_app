@@ -12,6 +12,6 @@ defmodule Rewarder.Rewards.Prize do
   def changeset(prize, attrs \\ %{}) do
     prize
     |> cast(attrs, [:description, :cost, :active])
-    |> validate_required([:description, :cost])
+    |> validate_required([:description, :cost, :active])
   end
 end

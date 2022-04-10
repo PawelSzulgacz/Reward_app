@@ -37,7 +37,7 @@ defmodule RewarderWeb.PrizeController do
         conn
         |> put_flash(:info, "Prized turned on, successfully")
         |> redirect(to: Routes.prize_path(conn, :index))
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, %Ecto.Changeset{} = _changeset} ->
         redirect(conn, to: Routes.prize_path(conn, :index))
     end
   end
@@ -49,7 +49,7 @@ defmodule RewarderWeb.PrizeController do
         conn
         |> put_flash(:info, "Prized turned off, successfully")
         |> redirect(to: Routes.prize_path(conn, :index))
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, %Ecto.Changeset{} = _changeset} ->
         redirect(conn, to: Routes.prize_path(conn, :index))
     end
 
@@ -68,23 +68,31 @@ defmodule RewarderWeb.PrizeController do
     render conn, "history_by_month.html", data: data, changeset: changeset
   end
 
-  def history_by_month(conn, params) do
+  def history_by_month(conn, _params) do
     data = Rewards.prizes_history_month(1)
     changeset = Rewards.create_changeset_prize_history()
     render conn, "history_by_month.html", data: data, changeset: changeset
   end
 
-  def acquire(conn, %{"id" => id}) do
-    case Rewards.add_prize(conn.assigns.current_user.id, id) do
+  def acquire(conn, %{"id" => reward_id}) do
+    prize = Rewards.get_prize!(String.to_integer(reward_id))
+
+    taking_gathered_points_from_user(conn.assigns.current_user.id, prize.cost)
+
+    case Rewards.create_prize_history(%{reward_id: String.to_integer(reward_id), user_id: conn.assigns.current_user.id}) do
       {:ok, _prize} ->
         conn
         |> put_flash(:info, "Congratulation, you got a reward!")
         |> redirect(to: Routes.prize_path(conn, :index))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        redirect(conn, to: Routes.prize_path(conn, :index))
     end
+  end
 
-    redirect(conn, to: Routes.prize_path(conn, :index))
+  def taking_gathered_points_from_user(user_id, quantity) do
+    user_who_takes = Transfer.get_balance!(user_id)
+    points = user_who_takes.gathered - quantity
+    Transfer.update_balance(user_who_takes, %{gathered: points})
   end
 
   def new(conn, _params) do
@@ -117,7 +125,7 @@ defmodule RewarderWeb.PrizeController do
   def update(conn, %{"id" => id, "prize" => prize_params}) do
     prize = Rewards.get_prize!(id)
     case Rewards.update_prize(prize, prize_params) do
-      {:ok, prize} ->
+      {:ok, _prize} ->
         conn
         |> put_flash(:info, "Prize updated successfully.")
         |> redirect(to: Routes.prize_path(conn, :index))

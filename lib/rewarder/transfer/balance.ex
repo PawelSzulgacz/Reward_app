@@ -13,6 +13,6 @@ defmodule Rewarder.Transfer.Balance do
   def changeset(balance, attrs \\ %{}) do
     balance
     |> cast(attrs, [:to_give, :gathered, :month_points])
-    |> validate_required([])
+    |> validate_required([:user_id])
   end
 end

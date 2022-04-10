@@ -12,6 +12,6 @@ defmodule Rewarder.Rewards.Prize_history do
   def changeset(prize_history, attrs \\ %{}) do
     prize_history
     |> cast(attrs, [:reward_id, :user_id])
-    |> validate_required([:reward_id, :user_id])
+    |> validate_required([])
   end
 end

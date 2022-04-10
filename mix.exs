@@ -53,8 +53,8 @@ defmodule Rewarder.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:calendar, "~> 1.0.0"},
-      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
-      {:dart_sass, "~> 0.2", runtime: Mix.env() == :dev}
+      {:dart_sass, "~> 0.2", runtime: Mix.env() == :dev},
+      {:ex_doc, "~> 0.27"}
     ]
   end
 
