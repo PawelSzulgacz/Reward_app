@@ -4,15 +4,15 @@ defmodule Rewarder.Transfer.Balance do
 
   schema "balances" do
     belongs_to :user, Rewarder.Accounts.User
-    field :to_give, :integer
-    field :gathered, :integer
-    field :month_points, :integer
+    field :to_give, :integer, default: 50
+    field :gathered, :integer, default: 0
+    field :month_points, :integer, default: 50
   end
 
   @doc false
   def changeset(balance, attrs \\ %{}) do
     balance
     |> cast(attrs, [:to_give, :gathered, :month_points])
-    |> validate_required([:user_id])
+    |> validate_required([])
   end
 end

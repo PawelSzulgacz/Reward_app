@@ -14,13 +14,12 @@ defmodule RewarderWeb.UserRegistrationController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
+        Transfer.add_points(user)
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
             &Routes.user_confirmation_url(conn, :edit, &1)
           )
-
-        Transfer.add_points(user)
 
         conn
         |> put_flash(:info, "User created successfully.")

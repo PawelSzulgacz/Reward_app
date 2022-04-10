@@ -4,7 +4,7 @@ defmodule RewarderWeb.PrizeController do
   alias Rewarder.Rewards
   alias Rewarder.Rewards.Prize
   alias Rewarder.Transfer
-
+  alias Rewarder.Accounts.UserNotifier
   def index(conn, _params) do
 
     prizes = list_of_prizes_sorted()
@@ -76,11 +76,11 @@ defmodule RewarderWeb.PrizeController do
 
   def acquire(conn, %{"id" => reward_id}) do
     prize = Rewards.get_prize!(String.to_integer(reward_id))
-
     taking_gathered_points_from_user(conn.assigns.current_user.id, prize.cost)
 
     case Rewards.create_prize_history(%{reward_id: String.to_integer(reward_id), user_id: conn.assigns.current_user.id}) do
       {:ok, _prize} ->
+        UserNotifier.reward_email(conn, prize)
         conn
         |> put_flash(:info, "Congratulation, you got a reward!")
         |> redirect(to: Routes.prize_path(conn, :index))
@@ -138,7 +138,6 @@ defmodule RewarderWeb.PrizeController do
   def delete(conn, %{"id" => id}) do
     prize = Rewards.get_prize!(id)
     {:ok, _prize} = Rewards.delete_prize(prize)
-
     conn
     |> put_flash(:info, "Prize deleted successfully.")
     |> redirect(to: Routes.prize_path(conn, :index))

@@ -23,9 +23,9 @@ defmodule Rewarder.Transfer do
 
     changeset = user
     |> build_assoc(:balances)
-    |> Balance.changeset()
+    |> Balance.changeset(%{user_id: user.id})
 
-    Repo.insert(%{user_id: user.id})
+    Repo.insert(changeset)
 
   end
 

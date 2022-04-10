@@ -18,8 +18,9 @@ defmodule Rewarder.Rewards do
   def prizes_history_month(month) do
     query = from h in "prize_histories",
     inner_join: p in "prizes",
-    where: h.reward_id == p.id and fragment("date_part('month', ?)",h.inserted_at) == ^month,
-    select: %{description: p.description, cost: p.cost, when: h.inserted_at}
+    inner_join: u in "users",
+    where: h.reward_id == p.id and h.user_id == u.id and fragment("date_part('month', ?)",h.inserted_at) == ^month,
+    select: %{description: p.description, cost: p.cost, when: h.inserted_at, name: u.name, surname: u.surname}
     Repo.all(query)
   end
 

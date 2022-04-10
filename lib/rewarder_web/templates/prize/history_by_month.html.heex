@@ -19,6 +19,7 @@
       <tbody>
         <thead>
           <tr>
+            <th scope="col">User</th>
             <th scope="col">Description</th>
             <th scope="col">Cost</th>
             <th scope="col">Data</th>
@@ -26,6 +27,8 @@
         </thead>
         <%= for prize <- @data do %>
         <tr>
+            <td><%= prize.name %>
+            <%= prize.surname %></td>
             <td><%= prize.description %></td>
             <td><%= prize.cost %></td>
             <td><%= prize.when.hour %>:<%= prize.when.minute %> <%= prize.when.day %>.<%= prize.when.month %>.<%= prize.when.year %></td>

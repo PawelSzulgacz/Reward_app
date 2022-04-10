@@ -34,7 +34,7 @@ defmodule RewarderWeb.PrizeControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.prize_path(conn, :create), prize: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Prize"
+      assert html_response(conn, 302) =~ "New Prize"
     end
   end
 
@@ -43,7 +43,7 @@ defmodule RewarderWeb.PrizeControllerTest do
 
     test "renders form for editing chosen prize", %{conn: conn, prize: prize} do
       conn = get(conn, Routes.prize_path(conn, :edit, prize))
-      assert html_response(conn, 200) =~ "Edit Prize"
+      assert html_response(conn, 302) =~ "Edit Prize"
     end
   end
 

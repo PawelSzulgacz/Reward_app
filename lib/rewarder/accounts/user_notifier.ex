@@ -76,4 +76,13 @@ defmodule Rewarder.Accounts.UserNotifier do
     ==============================
     """)
   end
+
+  def reward_email(conn, prize) do
+    deliver(conn.assigns.current_user.email, "You got a reward!", """
+    Congratulations  #{conn.assigns.current_user.name} #{conn.assigns.current_user.surname}!
+
+    You just got a prize - #{prize.description}
+
+    """)
+  end
 end
